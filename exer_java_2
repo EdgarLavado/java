@@ -1,0 +1,184 @@
+package biblioteca4;
+import java.util.Scanner;
+/**
+ *
+ * @author Edgar
+ */
+public class Biblioteca4 {
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+       
+        Scanner in = new Scanner(System.in);
+        Livro tempL =new Livro();
+        int op;
+       
+        do{
+            System.out.println("Escolha uma opção:\n"
+                    + "1- Registar Livro\n"
+                    + "2- Consultar Livro\n"
+                    + "3- Listar Livro\n"
+                    + "0- Sair\n");
+            op = in.nextInt();
+           
+            if(op==1){
+               
+                System.out.println("Introduza o nome do Livro:");
+                in.nextLine();
+                String nomeL = in.nextLine();
+                System.out.println("Introduza o tipo do Livro:"
+                        + "1 - Romance.\n"
+                        + "2 - Ficção Cientifica.\n"
+                        + "3 - Politica.\n"
+                        + "4 - Cultura.\n"
+                        + "5 - Tecnico.\n");
+                int tipoL = in.nextInt();
+                System.out.println("Introduza o ano de edição do Livro:");
+                int anoL = in.nextInt();
+                System.out.println("Introduza o valor de requisição:");
+                double valorL = in.nextDouble();
+               
+                Livro livroReg = new Livro(nomeL,tipoL,anoL,valorL);
+                livroReg.registar();
+               
+            }else if(op==2){
+                System.out.println("Introduza a referência pretendida:");
+                int refL = in.nextInt();
+                tempL.infoLivro(refL);
+               
+            }else if(op==3){
+                tempL.listaLivros();
+               
+            }else if(op==0){
+                System.out.println("Obrigado");
+            }else{
+                System.out.println("Erro! Escolha uma opção válida!");
+            }
+           
+           
+        }while(op!=0);
+       
+       
+       
+    }
+   
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Classe Livro
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package biblioteca4;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+/**
+ *
+ * @author Utilizador
+ */
+public class Livro {
+   
+    private String nome;
+    private int ano_edicao;
+    private int id_tipo;
+    private double valor_requisicao;
+   
+       private Connection conn = null;
+       private Statement lig = null;
+       private ResultSet res = null;
+    public Livro(String nome, int ano_edicao, int id_tipo, double valor_requisicao) {
+        this.nome = nome;
+        this.ano_edicao = ano_edicao;
+        this.id_tipo = id_tipo;
+        this.valor_requisicao = valor_requisicao;
+    }
+    public Livro() {
+    }
+   
+   
+    public void registar(){
+       
+        try{
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca?user=root&password=");
+        lig = conn.createStatement();
+       
+        lig.executeUpdate("INSERT INTO livros (nome, id_tipo, ano_edicao, valor_requisicao) VALUES ('"+nome+"',"+id_tipo+","+ano_edicao+","+valor_requisicao+")");
+        System.out.println("Registado com sucesso!");
+       
+        }catch(SQLException ex){
+           System.out.println("SQLException: "+ex.getMessage()+"\n"
+                    + "SQLState: "+ex.getSQLState()+"\n"
+                    + "VendorError: "+ex.getErrorCode());
+        }
+       
+       
+    }
+   
+    public void infoLivro(int ref){
+       
+        try{
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca?user=root&password=");
+        lig = conn.createStatement();
+       
+        res=lig.executeQuery("SELECT livros.*, tipo.descricao AS tipo FROM livros, tipo WHERE livros.id_tipo=tipo.id_tipo AND codreferencia="+ref);
+       
+        while(res.next()){
+           
+            String nome = res.getString("nome");
+            String descr =res.getString("tipo");
+            int anoE = res.getInt("ano_edicao");
+            double valorR = res.getDouble("valor_requisicao");
+           
+            System.out.println("Nome: "+nome+"\n"
+                    + "Tipo: "+descr+"\n"
+                            + "Ano Edição: "+anoE+"\n"
+                                    + "Valor de Requisição: "+valorR+"€\n");
+           
+        }
+       
+        }catch(SQLException ex){
+           System.out.println("SQLException: "+ex.getMessage()+"\n"
+                    + "SQLState: "+ex.getSQLState()+"\n"
+                    + "VendorError: "+ex.getErrorCode());
+        }
+    }
+   
+    public void listaLivros(){
+        try{
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca?user=root&password=");
+        lig = conn.createStatement();
+       
+        res=lig.executeQuery("SELECT livros.*, tipo.descricao AS tipo FROM livros, tipo WHERE livros.id_tipo=tipo.id_tipo");
+       
+        while(res.next()){
+           
+            String nome = res.getString("nome");
+            String descr =res.getString("tipo");
+            int anoE = res.getInt("ano_edicao");
+            double valorR = res.getDouble("valor_requisicao");
+           
+            System.out.println("Nome: "+nome+"\n"
+                    + "Tipo: "+descr+"\n"
+                            + "Ano Edição: "+anoE+"\n"
+                                    + "Valor de Requisição: "+valorR+"€\n");
+           
+        }
+       
+        }catch(SQLException ex){
+           System.out.println("SQLException: "+ex.getMessage()+"\n"
+                    + "SQLState: "+ex.getSQLState()+"\n"
+                    + "VendorError: "+ex.getErrorCode());
+        }
+       
+    }
+   
+}
