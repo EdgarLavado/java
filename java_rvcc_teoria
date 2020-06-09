@@ -1,0 +1,53 @@
+Java
+Java é uma linguagem de programação que desenvolveu o paradigma de programação orientada e objetos, criada na década de 90 por uma 
+equipa chefiada por James Gosling, na empresa Sun Microsystems e que mais tarde foi adquirida pela Oracle, Java é compilado para 
+bytecode e interpretado por uma máquina virtual (o Java Virtual Machine ou JVM) o que permite que o código escrito seja executado em 
+qualquer plataforma(“Write once, run anywhere.”)
+
+Características do Java:
+-Orientada a objetos;
+-Portátil;
+-Sintaxe Similar a C/C++;
+-Suporta caracteres de Unicode;
+-É distribuída com um vasto conjunto de APIs (bibliotecas);
+A programação orientada a objetos traz consigo uma ideia muito interessante: a representação de cada elemento em termos de um objeto, ou classe. Esse tipo de representação procura aproximar o sistema ao que é observado no mundo real, e um objeto contém características e ações, assim como vemos na realidade. Esse tipo de representação traz algumas vantagens muito interessantes para os programadores assim como para o utilizador do programa. Veremos algumas delas a seguir.
+
+A reutilização do código é um dos principais requisitos no desenvolvimento de software atual, devido ao aumento exponencial de sistemas 
+e da sua complexidade, aliada a uma maior necessidade de redução no tempo de desenvolvimento, assim como ter programas e sistemas com um 
+numero menor de linhas de código, uma vez que os objetos trazem com sigo representações claras de cada um dos seus elementos ao mesmo 
+tempo que normalmente são independentes entre si faz com que seja ideal para a sua reutilização no desenvolvimento de outros sistemas no 
+futuro, assim como o facto de as bibliotecas associadas por si só trazem representações de classes, que são muito mais claras por serem 
+uma representação do mundo o que por outro lado permite a programação orientada a objetos  ser uma linguagem de fácil leitura e 
+manutenção, quando comparada com C, ou com uma linguagem estruturada.
+
+No entanto a grande desvantagem em relação às linguagens estruturadas é que estas são mais lentas quando executamos um programa ou 
+aplicação quando comparadas com linguagem estruturada, devido a ser um modelo mais complexo e que tenha mais desvios e de execução 
+diferente de uma execução sequencial, razão pela qual observamos a preferência por linguagem estruturada em hardware limitado, ou em 
+programação para sistemas móveis como o Android que apesar de ser em Java é feita de forma a ser o menos orientada a objetos possível, 
+mesmo que em termos tecnológicos essa execução mais lenta seja praticamente não sentida.
+
+ Os 4 pilares da Programação Orientada a Objetos:
+Uma linguagem para ser uma Linguagem de Programação Orientada a Objetos, deve cumprir com os seguintes 4 paradigmas:
+
+-Abstração:
+O objeto como representação de um objeto real deve responder a três pontos:
+-1º deve-lhe ser dado uma identidade, que deve de ser única dentro do sistema para que não haja conflito, ou caso a linguagem esteja 
+dividida em pacotes essa identidade não pode ser repetida no pacote;
+-2º propriedades, ou seja, deve ter elementos ou características que o definem como aquele objeto e o diferenciam;
+-3º ser definidas as ações que o objeto vai executar, e como o objeto se vai comportar, ou seja, definimos aquilo que é chamado de 
+métodos.
+
+-Encapsulamento:
+- Um dos elementos ou técnica principal da POO, e que permite adicionar a um objeto uma camada de segurança adicional, ao esconder as 
+propriedades de um objeto e tornando-as privadas, de forma a evitar assim o acesso direto a elas.
+
+-Herança:
+-É a característica que permite a reutilização de código, e que permite a otimização em tempo e linhas de código. Os objetos em POO 
+estão organizados de forma hierárquica e um objeto mais abaixo na hierarquia irá herdar características de objetos que estão acima dele,
+que por sua vez podem ser de herança direta (caso seja o objeto esteja diretamente acima) ou de herança indireta (objetos mais acima), 
+mas a herança e a forma com esta é entendida varia muito de linguagem para linguagem (em C++ por exemplo temos a questão de herança 
+múltipla, em que o objeto herda diretamente de objetos não acima dele).
+
+-Polimorfismo
+-Consiste na alteração do funcionamento interno de um método herdade de um objeto pai, ou seja da forma a ou ação que este vai executar,
+para procedermos a essa alteração em Java usamos o atributo “@Override”.
