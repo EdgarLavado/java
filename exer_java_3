@@ -1,0 +1,340 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package clinica;
+import java.util.ArrayList;
+import java.util.Scanner;
+/**
+ *
+ * @author Edgar
+ */
+public class Clinica {
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        Scanner in = new Scanner(System.in);
+       
+        ArrayList<Paciente> aListPac = new ArrayList<>();
+        ArrayList<Medico> aListMed = new ArrayList<>();
+        ArrayList<Consulta> ListConsu = new ArrayList<>();
+       
+        int op;
+       
+        do{
+            System.out.println("Escolha uma opção:\n"
+                    + "1 - Registar Paciente\n"
+                    + "2 - Registar Médico\n"
+                    + "3 - Adicionar Consulta\n"
+                    + "4 - Verificar Especialidade\n"
+                    + "0 - Sair");
+            op = in.nextInt();
+           
+            if(op == 1){
+                //registar um utente
+                System.out.println("Insira o número do utente:");
+                int nu = in.nextInt();
+                System.out.println("Insira o nome do utente:");
+                String nome = in.next();
+                System.out.println("Insira o tipo de seguro do utente:");
+                String tSeg= in.next();
+               
+                //flag é um método de sinalização
+                int flag = 0;
+                //procura no array
+                for (int i = 0; i < aListPac.size(); i++) {
+                    //verifica se o utente já esta registado
+                    if(aListPac.get(i).getNumeroUtente()==nu){
+                        System.out.println("O paciente já existe na base de dados!");
+                        flag = 1;
+                        break;
+                        //se existir a flag muda de valor e para a procura
+                    }                  
+                }
+                //se a flag não muda de valor regista o paciente
+                if(flag == 0){
+                    //adiciona o paciente
+                    aListPac.add(new Paciente(nu,nome,tSeg));
+                    System.out.println("Paciente Registado com sucesso!");
+                }
+              
+               
+            }else if(op == 2){
+                //registar um medico
+                System.out.println("Insira o número de ordem do Médico:");
+                int no = in.nextInt();
+                System.out.println("Insira o nome do Médico:");
+                String nome = in.next();
+                System.out.println("Quantas especialidades tem o Médico?");
+                int countEsp = in.nextInt();
+               
+                ArrayList<String> tempEsp = new ArrayList<>();
+               
+                //insire as especialidades num array
+                for (int i = 0; i < countEsp; i++) {
+                    System.out.println("Insira a "+(i+1)+"ª especialidade:");
+                    String ep = in.next();   
+                    tempEsp.add(ep);
+                   
+                }
+               
+                int flag = 0;
+                //procura no array
+                for (int i = 0; i < aListMed.size(); i++) {
+                    //verifica se o medico esta registado
+                    if(aListMed.get(i).getNumeroOrdem() == no ){
+                        System.out.println("O Médico já existe na base de dados!");
+                        flag = 1;
+                        break;
+                    }                  
+                }
+                //se a flag nao mudou regista o medico
+                if(flag == 0){
+                    //adiciona o registo
+                    aListMed.add(new Medico(no,nome,tempEsp));
+                    System.out.println("Médico Registado com sucesso!");
+                }
+               
+            }else if(op == 3){
+                //regista uma consulta
+                System.out.println("Insira o numero da Consulta:");
+                int nconsu = in.nextInt();
+                System.out.println("Insira o valor da consulta:");
+                double preco = in.nextDouble();
+                System.out.println("Insira a Especialidade");
+                String esp = in.next();
+                System.out.println("Insira o numero de utente:");
+                int nuten = in.nextInt();
+                System.out.println("Insira o numero de ordem do médico:");
+                int nmed = in.nextInt();
+               
+                Paciente tempPac = null;
+               
+                for (int i = 0; i < aListPac.size(); i++) {
+                //verifica se o utente esta registado
+                    if(aListPac.get(i).getNumeroUtente()==nuten){
+                        tempPac = aListPac.get(i);
+                    }
+                }
+               
+                Medico tempMed = null;
+               
+                for (int i = 0; i < aListMed.size(); i++) {
+                //verifica se o medico esta registado   
+                    if(aListMed.get(i).getNumeroOrdem()==nmed){
+                        tempMed = aListMed.get(i);
+                    }
+                   
+                }
+                //regista a consulta
+                if(tempMed.isPossible(esp)){
+                    ListConsu.add(new Consulta(nconsu, preco, esp, tempMed, tempPac));
+                    System.out.println("Consulta registada com sucesso!");
+                }else{
+                    System.out.println("Consulta não registada, O médico escolhido não possui essa especialidade!");
+                }    
+               
+            }else if(op == 4){
+               
+                System.out.println("Insira a Especialidade:");
+                String espe = in.next();
+                //verifica se o medico tema especialidade
+                for (int i = 0; i < aListMed.size(); i++) {
+                   
+                    if(aListMed.get(i).isPossible(espe)){
+                        System.out.println("Médico(a): Dr(a). "+aListMed.get(i).getNome()+"\n");
+                    }
+                   
+                }
+               
+            }else if(op == 0){
+                System.out.println("Obrigado! Adeus!");
+            }else{
+                System.out.println("Erro Escolha uma opção válida!");
+            }
+           
+        }while(op!=0);
+       
+    }
+   
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Classe Medico
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package clinica;
+import java.util.ArrayList;
+/**
+ *
+ * @author Edgar
+ */
+public class Medico {
+    //variaveis da classe
+    int NumeroOrdem;
+    String Nome;
+    ArrayList<String> Especialidades;
+    //array
+   
+    //constructor
+    public Medico(int NumeroOrdem, String Nome, ArrayList<String> Especialidades) {
+        this.NumeroOrdem = NumeroOrdem;
+        this.Nome = Nome;
+        this.Especialidades = Especialidades;
+    }
+   
+    //getters and setters
+    public int getNumeroOrdem() {
+        return NumeroOrdem;
+    }
+    public void setNumeroOrdem(int NumeroOrdem) {
+        this.NumeroOrdem = NumeroOrdem;
+    }
+    public String getNome() {
+        return Nome;
+    }
+    public void setNome(String Nome) {
+        this.Nome = Nome;
+    }
+    public ArrayList<String> getEspecialidades() {
+        return Especialidades;
+    }
+    public void setEspecialidades(ArrayList<String> Especialidades) {
+        this.Especialidades = Especialidades;
+    }
+   
+    //metodo para ver se o medico tem a especialidade
+    public boolean isPossible(String esp){
+       
+        boolean res = false;
+       
+        for (int i = 0; i < Especialidades.size(); i++) {
+           
+            if(Especialidades.get(i).equals(esp)){
+                res=true;
+            }
+        }
+ 
+        return res;
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Classe Paciente
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package clinica;
+/**
+ *
+ * @author Edgar
+ */
+public class Paciente {
+    //variaveis da classe
+    int NumeroUtente;
+    String Nome;
+    String TipoSeguro;
+   
+    //construtor da classe
+    public Paciente(int NumeroUtente, String Nome, String TipoSeguro) {
+        this.NumeroUtente = NumeroUtente;
+        this.Nome = Nome;
+        this.TipoSeguro = TipoSeguro;
+    }
+   
+    //getters and setters
+    public int getNumeroUtente() {
+        return NumeroUtente;
+    }
+    public void setNumeroUtente(int NumeroUtente) {
+        this.NumeroUtente = NumeroUtente;
+    }
+    public String getNome() {
+        return Nome;
+    }
+    public void setNome(String Nome) {
+        this.Nome = Nome;
+    }
+    public String getTipoSeguro() {
+        return TipoSeguro;
+    }
+    public void setTipoSeguro(String TipoSeguro) {
+        this.TipoSeguro = TipoSeguro;
+    }
+   
+   
+   
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Classe Consulta
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package clinica;
+/**
+ *
+ * @author Edgar
+ */
+public class Consulta {
+    //variaveis da classe
+    int NumeroConsulta;
+    double ValorConsulta;
+    String Especialidade;
+    Medico Med;
+    Paciente Pac;
+    //constructor
+    public Consulta(int NumeroConsulta, double ValorConsulta, String Especialidade, Medico Med, Paciente Pac) {
+        this.NumeroConsulta = NumeroConsulta;
+        this.ValorConsulta = ValorConsulta;
+        this.Especialidade = Especialidade;
+        this.Med = Med;
+        this.Pac = Pac;
+    }
+   
+    //getters and setters
+    public int getNumeroConsulta() {
+        return NumeroConsulta;
+    }
+    public void setNumeroConsulta(int NumeroConsulta) {
+        this.NumeroConsulta = NumeroConsulta;
+    }
+    public double getValorConsulta() {
+        return ValorConsulta;
+    }
+    public void setValorConsulta(double ValorConsulta) {
+        this.ValorConsulta = ValorConsulta;
+    }
+    public String getEspecialidade() {
+        return Especialidade;
+    }
+    public void setEspecialidade(String Especialidade) {
+        this.Especialidade = Especialidade;
+    }
+    public Medico getMed() {
+        return Med;
+    }
+    public void setMed(Medico Med) {
+        this.Med = Med;
+    }
+    public Paciente getPac() {
+        return Pac;
+    }
+    public void setPac(Paciente Pac) {
+        this.Pac = Pac;
+    }
+
+   
+}
